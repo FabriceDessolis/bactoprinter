@@ -1133,7 +1133,7 @@ class Panel():
             return
 
         # Default: move by direction name (Up/Down/North/South/East/West)
-        self.s.move_towards(b.description, 5)
+        self.s.move_towards(b.description, 1)  # changement de 5mm à 1 mm
         with self.output:
             self.output.clear_output()
             print("moving...")
