@@ -5,6 +5,7 @@ addons/.DS_Store
 .ipynb_checkpoints/demo-checkpoint.ipynb
 .ipynb_checkpoints/enderscope-checkpoint.py
 .ipynb_checkpoints/serial_utils-checkpoint.py
+__pycache__/
 __pycache__/enderscope.cpython-39.pyc
 __pycache__/enderscope.cpython-311.pyc
 __pycache__/serial_utils.cpython-39.pyc

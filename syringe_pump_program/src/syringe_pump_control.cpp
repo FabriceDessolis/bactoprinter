@@ -23,6 +23,17 @@ long longueur_to_steps(float longueur)
   return steps;
 }
 
+// Syringe pump A : enable the stepper driver (holding torque, ready to move)
+// This driver's EN pin is active-LOW: LOW = enabled, HIGH = disabled.
+void enable_motor(){
+  digitalWrite(enable, LOW);
+}
+
+// Syringe pump A : disable the stepper driver (no holding torque) when idle
+void disable_motor(){
+  digitalWrite(enable, HIGH);
+}
+
 
 
 void setup() {   
@@ -30,10 +41,10 @@ void setup() {
   pinMode(xDir, OUTPUT);
   pinMode(xStep, OUTPUT);
   pinMode(enable, OUTPUT);
-  digitalWrite(enable, LOW);
   xStepper.setPinsInverted(false, false, true);
+  disable_motor(); // Motor is idle at startup
 
-  xStepper.setMaxSpeed(500); // Speed : Steps per seconde
+  xStepper.setMaxSpeed(80); // Speed : Steps per seconde
   xStepper.setAcceleration(300); 
   xStepper.setSpeed(80); // Speed : Steps per seconde
   Serial.println("Syringe pump A : ready");
@@ -69,7 +80,7 @@ void loop()
   { 
     char CodeIn = Serial.read();
     if (CodeIn == 'A') { 
-      digitalWrite(enable, HIGH); 
+      enable_motor(); 
       to_go();}
 
     if (CodeIn == 'S'){
@@ -77,7 +88,7 @@ void loop()
       }
 
     if (CodeIn == 'R'){
-        digitalWrite(enable, HIGH);
+        enable_motor();
         to_back_off();
       }
     if (CodeIn == 'V'){
@@ -87,10 +98,11 @@ void loop()
         }
       }
   }
-  else 
-  { 
-    digitalWrite(enable,LOW);
-  } 
+
+  if (!xStepper.isRunning())
+  {
+    disable_motor(); // Disable the motor as soon as it is no longer moving
+  }
   xStepper.run();
 }
 
